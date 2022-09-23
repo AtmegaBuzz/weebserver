@@ -26,7 +26,7 @@ struct Server* serverCreate(
     int protocol
 );
 
-int runserver(struct Server* server);
+int runserver(struct Server* server,char* host_config_path);
 
 
 

@@ -56,7 +56,7 @@ struct Server* serverCreate(
 }
 
 
-int runserver(struct Server* server){
+int runserver(struct Server* server,char* host_config_path){
 
     char buffer[50000];
     char* http_response = "HTTP/1.1 200 OK\nDate: Mon, 27 Jul 2009 12:28:53 GMT\nServer: Apache/2.2.14 (Win32)\nLast-Modified: Wed, 22 Jul 2009 19:15:56 GMT\nContent-Type: text/html\nConnection: Closed\n\n<html><body><h1>Hello, saurabh!</h1><br><h1>hi Swapnil</h1></body></html>";
