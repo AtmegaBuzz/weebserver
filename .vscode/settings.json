@@ -1,5 +1,18 @@
 {
     "files.associations": {
-        "stdio.h": "c"
-    }
+        "stdio.h": "c",
+        "iostream": "cpp",
+        "cmath": "cpp",
+        "compare": "cpp",
+        "concepts": "cpp",
+        "cstdio": "cpp",
+        "cstdlib": "cpp",
+        "limits": "cpp",
+        "new": "cpp",
+        "*.tcc": "cpp",
+        "cstdint": "cpp",
+        "type_traits": "cpp",
+        "typeinfo": "cpp"
+    },
+    "C_Cpp.errorSquiggles": "Disabled"
 }

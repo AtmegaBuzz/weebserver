@@ -1,17 +1,21 @@
 
 all: webserver
 
-webserver: src/networking/server.o src/main.o
-	gcc src/networking/server.o src/main.o -o webserver
+webserver: src/networking/server.o src/main.o src/utils/utils.o
+	g++ src/networking/server.o src/main.o src/utils/utils.o -o webserver
 
 server.o: src/networking/server.c
-	gcc server.c
+	g++ server.c
 
 main.o: src/main.o
-	gcc main.c
+	g++ main.cpp
+
+utils.o: src/utils/utils.o
+	g++ utils.cpp
 
 clean:
 	rm src/networking/server.o
+	rm src/utils/utils.o
 	rm src/main.o
 	rm webserver
 	
