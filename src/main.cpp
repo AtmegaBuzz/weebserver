@@ -6,10 +6,10 @@
 #include "utils/utils.h"
 
 int main(int argc, char** argv){
-    // if (argc!=2){
-    //     perror('Invalid Number of arguments passed');
-    //     exit(1);
-    // }
+    if (argc!=2){
+        perror('Invalid Number of arguments passed');
+        exit(1);
+    }
 
     // FILE *server_cnfg = fopen(argv[2],'r');
     // char cnfg_buffer[5000];
@@ -32,12 +32,10 @@ int main(int argc, char** argv){
 
     // runserver(server,'');
 
-    std::string html ="<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><link rel=\"stylesheet\" href=\"folder/style.css\"><link rel=\"stylesheet\" href=\"style2.css\"><title>Document</title></head><body></body><script src=\"file33.js\"></script></html>";
-    std::vector<std::string> files =  parserJs(html);
-    
-    for(int i=0;i<files.size();i++){
-        std::cout << files[i] << std::endl;
-    }
+    std::string html ="<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><link rel=\"stylesheet\" href=\"style.css\"><link rel=\"stylesheet\" href=\"style2.css\"><title>Document</title></head><body></body><script src=\"file33.js\"></script></html>";
+    html_preprocessor(&html);
+
+    std::cout << html << std::endl;
 
     return 0;
 }
