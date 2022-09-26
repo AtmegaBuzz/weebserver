@@ -4,7 +4,11 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <pthread.h>
+#include <iostream>
+#include <filesystem>
+#include <fstream>
 #include "server.h"
+#include "../utils/utils.h"
 
 struct Server* serverCreate(
     char* ip,
@@ -16,6 +20,7 @@ struct Server* serverCreate(
 ){
 
     struct Server* server = (struct Server*) malloc(sizeof(struct Server));
+    
 
     server->ip = ip;
     server->port = port;
@@ -55,13 +60,31 @@ struct Server* serverCreate(
     return server;
 }
 
+int handle_client(std::string HOST_DIR_REL_PATH,std::string* buffer){
 
-int runserver(struct Server* server,char* host_config_path){
+    std::string index = "index.html";
+    std::string BASE_DIR = std::filesystem::current_path();
+    std::string DIR = HOST_DIR_REL_PATH;
+    std::string HOST_DIR = BASE_DIR + "/" + DIR;
+    
+    std::ifstream index_html(HOST_DIR);
+
+    std::string* html = buffer;
+    if(file_reader(HOST_DIR +"/"+index,html)){
+        return 1;
+    }
+        
+    html_preprocessor(html,HOST_DIR);
+    return 0;
+    
+
+}
+
+int runserver(struct Server* server,char* host_config_path,std::string HOST_DIR_REL_PATH){
 
     char buffer[50000];
-    char* http_response = "HTTP/1.1 200 OK\nDate: Mon, 27 Jul 2009 12:28:53 GMT\nServer: Apache/2.2.14 (Win32)\nLast-Modified: Wed, 22 Jul 2009 19:15:56 GMT\nContent-Type: text/html\nConnection: Closed\n\n<html><body><h1>Hello, saurabh!</h1><br><h1>hi Swapnil</h1></body></html>";
+    std::string html_response_buff;
     socklen_t addr_size = sizeof(server->address);
-
 
     while(1){
         printf("Waiting for connections...\n");
@@ -74,8 +97,10 @@ int runserver(struct Server* server,char* host_config_path){
         read(client_socket,buffer,50000);
         printf("%s\n",buffer);
 
-        write(client_socket,http_response,strlen(http_response));
+        handle_client(HOST_DIR_REL_PATH,&html_response_buff);
+        write(client_socket,html_response_buff.c_str(),strlen(html_response_buff.c_str()));
         printf("message sended\n");
+
         close(client_socket);
         
     }

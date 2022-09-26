@@ -1,5 +1,4 @@
-#ifndef _SERVER_H
-#define _SERVER_H
+#pragma once
 
 #include <arpa/inet.h>
 
@@ -26,8 +25,4 @@ struct Server* serverCreate(
     int protocol
 );
 
-int runserver(struct Server* server,char* host_config_path);
-
-
-
-#endif
+int runserver(struct Server* server,char* host_config_path,std::string HOST_DIR_REL_PATH);

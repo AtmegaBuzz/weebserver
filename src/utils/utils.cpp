@@ -5,6 +5,30 @@
 #include <regex>
 #include <vector>
 
+
+int file_reader(std::string file_path,std::string *buffer){
+
+    std::ifstream read_file(file_path);
+    *buffer = ""; // reiniting the buffer
+
+    if(read_file.is_open()){
+
+        char chunk;
+
+        while(read_file.get(chunk)){
+            *buffer += chunk;
+        }
+
+        read_file.close();
+        return 0;
+    }
+    else{
+        return 1;
+    }
+
+}
+
+
 std::vector<std::string> parserCss(std::string html){
 
 
@@ -46,7 +70,7 @@ std::vector<std::string> parserJs(std::string html){
 }
 
 
-int binderCss(std::string* html,std::vector<std::string> css_files){
+int binderCss(std::string* html,std::vector<std::string> css_files,std::string HOST_DIR){
 
     /* 
         Status 1 = binded successfully
@@ -54,25 +78,16 @@ int binderCss(std::string* html,std::vector<std::string> css_files){
     */
 
     std::string whole_css = "";
-
+    std::string buffer;
     for(int i=0;i<css_files.size();i++){
         
-        std::filesystem::path cwd = std::filesystem::current_path();
-
-        std::ifstream cssfile_fd(cwd / css_files[i]);
-
-        if(cssfile_fd.is_open()){
-
-            std::string chunk;
-
-            while(cssfile_fd>>chunk){
-                whole_css += chunk;
-            }
-
-            cssfile_fd.close();
+        if(file_reader(HOST_DIR + "/" + css_files[i],&buffer)){
+           return 1;
         }
+
         else{
-            return 1;
+            
+            whole_css += buffer;
         }
         
     }
@@ -87,7 +102,7 @@ int binderCss(std::string* html,std::vector<std::string> css_files){
 
 
 
-int binderJs(std::string* html,std::vector<std::string> js_files){
+int binderJs(std::string* html,std::vector<std::string> js_files,std::string HOST_DIR){
 
     /* 
         Status 1 = binded successfully
@@ -95,25 +110,16 @@ int binderJs(std::string* html,std::vector<std::string> js_files){
     */
 
     std::string whole_js = "";
+    std::string buffer;
 
     for(int i=0;i<js_files.size();i++){
         
-        std::filesystem::path cwd = std::filesystem::current_path();
-
-        std::ifstream jsfile_fd(cwd / js_files[i]);
-
-        if(jsfile_fd.is_open()){
-
-            std::string chunk;
-
-            while(jsfile_fd>>chunk){
-                whole_js += chunk;
-            }
-
-            jsfile_fd.close();
-        }
-        else{
+        if(file_reader(HOST_DIR + "/" + js_files[i],&buffer)){
             return 1;
+        }
+
+        else{
+            whole_js += buffer;
         }
         
     }
@@ -127,7 +133,7 @@ int binderJs(std::string* html,std::vector<std::string> js_files){
 }
 
 
-int html_preprocessor(std::string* html){
+int html_preprocessor(std::string* html,std::string HOST_DIR){
 
     /*
         Status Code:
@@ -140,12 +146,12 @@ int html_preprocessor(std::string* html){
     std::vector<std::string> js_files =  parserJs(*html);
     
 
-    if(binderCss(html,css_files)){
+    if(binderCss(html,css_files,HOST_DIR)){
         std::cout << "display 500 file not found css"<<std::endl;
         return 1;
     }
 
-    if(binderJs(html,js_files)){
+    if(binderJs(html,js_files,HOST_DIR)){
         std::cout << "display 500 file not found js"<<std::endl;
         return 2; 
     }

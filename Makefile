@@ -4,8 +4,8 @@ all: webserver
 webserver: src/networking/server.o src/main.o src/utils/utils.o
 	g++ src/networking/server.o src/main.o src/utils/utils.o -o webserver
 
-server.o: src/networking/server.c
-	g++ server.c
+server.o: src/networking/server.cpp
+	g++ server.cpp
 
 main.o: src/main.o
 	g++ main.cpp

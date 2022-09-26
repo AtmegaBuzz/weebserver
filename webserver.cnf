@@ -1,0 +1,4 @@
+
+server_ip = 192.168.100.5
+route: / {index.html}
+route: /about {about.html}
