@@ -4,6 +4,9 @@
 #include <string>
 #include <regex>
 #include <vector>
+#include <string.h>
+#include <stdlib.h>
+
 
 
 int file_reader(std::string file_path,std::string *buffer){
@@ -28,6 +31,38 @@ int file_reader(std::string file_path,std::string *buffer){
 
 }
 
+
+struct configs* parserConfig(std::string content){
+
+    struct Configs* config = (struct Configs*) malloc(sizeof(struct Config));
+    
+    
+    // extracting server ip
+
+    std::smatch match;
+    std::cout << content << std::endl;
+    std::regex r_ip("\\d{1,3}.\\d{1,3}.\\d{1,3}.\\d{1,3}");
+    std::regex_search(content,match,r_ip);
+    if(match.length()==0) config->ip = NULL;
+    else config->ip = match[0];
+
+    // extracting port
+
+    std::regex r_port("port=(\\d{1,4})");
+    std::regex_search(content,match,r_port);
+    if(match.length()<2) config->port = NULL;
+    else config->port = match[1];
+    
+    // extract routes
+    std::regex r_routes("routes:{(*)}?;");
+    std::regex_search(content,match,r_routes);
+    std::cout << match[0] << std::endl; 
+    // if(match.length()<2) CONFIGS.port = NULL;
+    // else CONFIGS.port = match[1];
+
+
+    return config;
+}
 
 std::vector<std::string> parserCss(std::string html){
 
