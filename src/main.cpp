@@ -9,27 +9,16 @@
 #include "utils/utils.h"
 
 int main(int argc, char** argv){
-    // if (argc!=3){
-    //     perror("Invalid Number of arguments passed");
-    //     exit(1);
-    // } 
-
-    // struct Server* server = serverCreate(
-    //     "172.17.3.222",
-    //     80,
-    //     5,
-    //     AF_INET,
-    //     SOCK_STREAM,
-    //     0
-    // );
-
-
-    // std::string host_dir_rel_path = argv[2];
-    // runserver(server,"",host_dir_rel_path);
-
+    if (argc!=3){
+        perror("Invalid Number of arguments passed");
+        exit(1);
+    } 
 
     // config file parser 
-    std::ifstream config_file("webserver.config"); 
+    std::string BASE_DIR = std::filesystem::current_path();
+    std::string host_dir_rel_path = argv[2];
+
+    std::ifstream config_file(BASE_DIR+"/"+host_dir_rel_path+"/"+".config"); 
     std::string config_content;
     char character;
 
@@ -37,9 +26,18 @@ int main(int argc, char** argv){
         config_content+=character;
     }
 
-    parserConfig(config_content);
+    struct Configs* config = parserConfig(config_content);
 
+    struct Server* server = serverCreate(
+        (char*)config->ip.c_str(),
+        config->port,
+        5,
+        AF_INET,
+        SOCK_STREAM,
+        0
+    );
 
+    runserver(server,host_dir_rel_path,config);
 
     return 0;
 }

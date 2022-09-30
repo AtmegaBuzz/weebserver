@@ -56,11 +56,12 @@ struct Server* serverCreate(
         listen(server->socket,server->MAX_CONNEXTIONS)
         );
 
+    printf("Listening For Connections.\n");
 
     return server;
 }
 
-int handle_client(std::string HOST_DIR_REL_PATH,std::string* buffer){
+int handle_client(std::string HOST_DIR_REL_PATH,std::string* buffer,struct Configs* config){
 
     std::string index = "index.html";
     std::string BASE_DIR = std::filesystem::current_path();
@@ -76,11 +77,11 @@ int handle_client(std::string HOST_DIR_REL_PATH,std::string* buffer){
         
     html_preprocessor(html,HOST_DIR);
     return 0;
-    
-
 }
 
-int runserver(struct Server* server,char* host_config_path,std::string HOST_DIR_REL_PATH){
+
+
+int runserver(struct Server* server,std::string HOST_DIR_REL_PATH,struct Configs* config){
 
     char buffer[50000];
     std::string html_response_buff;
@@ -97,7 +98,7 @@ int runserver(struct Server* server,char* host_config_path,std::string HOST_DIR_
         read(client_socket,buffer,50000);
         printf("%s\n",buffer);
 
-        handle_client(HOST_DIR_REL_PATH,&html_response_buff);
+        handle_client(HOST_DIR_REL_PATH,&html_response_buff,config);
         write(client_socket,html_response_buff.c_str(),strlen(html_response_buff.c_str()));
         printf("message sended\n");
 

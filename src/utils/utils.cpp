@@ -6,6 +6,7 @@
 #include <vector>
 #include <string.h>
 #include <stdlib.h>
+#include "utils.h"
 
 
 
@@ -31,36 +32,81 @@ int file_reader(std::string file_path,std::string *buffer){
 
 }
 
+std::vector<std::string> split(std::string str,char delimiter){
 
-struct configs* parserConfig(std::string content){
+    std::vector<std::string> splitted_str = {"",""}; // init with 2 size strning array
 
-    struct Configs* config = (struct Configs*) malloc(sizeof(struct Config));
+    int char_idx = 0;
+
+    while(1){
+        if(str[char_idx]==delimiter || char_idx==str.length()){
+            break;
+        }
+        splitted_str[0] += str[char_idx];
+        char_idx++;
+    }
+
+    char_idx++;
     
+    while(1){
+        if(str[char_idx]==delimiter || char_idx==str.length()){
+            break;
+        }
+        splitted_str[1] += str[char_idx];
+        char_idx++;
+    }
+
+    return splitted_str;
+
+}
+
+struct Configs* parserConfig(std::string content){
+
+    struct Configs* config = new Configs();
     
     // extracting server ip
 
     std::smatch match;
-    std::cout << content << std::endl;
     std::regex r_ip("\\d{1,3}.\\d{1,3}.\\d{1,3}.\\d{1,3}");
     std::regex_search(content,match,r_ip);
-    if(match.length()==0) config->ip = NULL;
-    else config->ip = match[0];
+    if(match.length()==0) config->ip = "";
+
+    else {
+            std::string ip_ = match[0];
+            config->ip = ip_;
+        };
 
     // extracting port
 
     std::regex r_port("port=(\\d{1,4})");
     std::regex_search(content,match,r_port);
-    if(match.length()<2) config->port = NULL;
-    else config->port = match[1];
+    if(match.length()==0) config->port = -1;
+    else {
+            std::string port_ = match[1];
+            int port;
+            if(sscanf(port_.c_str(),"%d",&port)!=1) config->port = -1;
+            else config->port = port;
+        };
     
     // extract routes
-    std::regex r_routes("routes:{(*)}?;");
-    std::regex_search(content,match,r_routes);
-    std::cout << match[0] << std::endl; 
-    // if(match.length()<2) CONFIGS.port = NULL;
-    // else CONFIGS.port = match[1];
+    
+    std::vector<struct Route> routes;
+    std::regex r_routes("/([a-zA-Z0-9]*),[a-zA-Z0-9/]*.html");
+    std::sregex_iterator iter(content.begin(),content.end(),r_routes);
+    std::sregex_iterator end;
 
+    while(iter != end)
+    {   
+        struct Route route;
+        std::vector<std::string> splitted_str = split((*iter)[0],',');
+        route.route = splitted_str[0];
+        route.route_file_path = splitted_str[1];
+        routes.push_back(route);
+        ++iter;
+    }
 
+    config->routes = routes;
+    
     return config;
 }
 

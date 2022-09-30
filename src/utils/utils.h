@@ -5,18 +5,18 @@
 
 // can be stored in array of 2. for convenience using struct route
 struct Route{
-    char* route;
-    char* route_file_path;
+    std::string route;
+    std::string route_file_path;
 };
 
 struct Configs{
-    char* ip;
+    std::string ip;
     int port;
-    // std::vector<struct Route>;
+    std::vector<struct Route> routes;
 };
+ 
 
-
-std::vector<std::string> parserConfig(std::string content);
+struct Configs* parserConfig(std::string content);
 std::vector<std::string> parserCss(std::string html);
 std::vector<std::string> parserJs(std::string html);
 int binderCss(std::string* html,std::vector<std::string> css_files,std::string HOST_DIR);

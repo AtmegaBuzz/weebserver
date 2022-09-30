@@ -25,4 +25,4 @@ struct Server* serverCreate(
     int protocol
 );
 
-int runserver(struct Server* server,char* host_config_path,std::string HOST_DIR_REL_PATH);
+int runserver(struct Server* server,std::string HOST_DIR_REL_PATH,struct Configs* config);
