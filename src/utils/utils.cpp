@@ -150,6 +150,45 @@ std::vector<std::string> parserJs(std::string html){
     return js_files;
 }
 
+int bind_http_header(std::string* html,int status){
+
+
+     std::string BASE_DIR = std::filesystem::current_path();
+     std::string header_binded_html;
+
+    if(status==500){
+        if(file_reader(BASE_DIR + "/" + "responses/500.temp",&header_binded_html)){
+            *html = "";
+            if(file_reader(BASE_DIR+"/"+"responses/500.html",html)){
+                perror("Cannot find server responses\n.");
+                exit(1);
+            }
+        }
+    }
+
+    else if(status==404){
+        if(file_reader(BASE_DIR + "/" + "responses/404.temp",&header_binded_html)){
+            *html = "";
+            if(file_reader(BASE_DIR+"/"+"responses/404.html",html)){
+                perror("Cannot find server responses\n.");
+                exit(1);
+            }
+            std::cout << BASE_DIR+"/"+"responses/404.html" << *html << std::endl;
+        }
+    }
+
+    else if(status==200){
+        if(file_reader(BASE_DIR + "/" + "responses/200.temp",&header_binded_html)){
+            perror("Cannot find server responses\n.");
+            exit(1);
+        }
+    }
+
+    header_binded_html += "\n\n";
+    header_binded_html += *html;
+    *html = header_binded_html;
+    return 0;
+}
 
 int binderCss(std::string* html,std::vector<std::string> css_files,std::string HOST_DIR){
 
@@ -214,7 +253,7 @@ int binderJs(std::string* html,std::vector<std::string> js_files,std::string HOS
 }
 
 
-int html_preprocessor(std::string* html,std::string HOST_DIR){
+int html_preprocessor(std::string* html,std::string HOST_DIR,int status){
 
     /*
         Status Code:
@@ -234,8 +273,10 @@ int html_preprocessor(std::string* html,std::string HOST_DIR){
 
     if(binderJs(html,js_files,HOST_DIR)){
         std::cout << "display 500 file not found js"<<std::endl;
-        return 2; 
+        return 1; 
     }
+
+    bind_http_header(html,status);
 
     return 0;
 

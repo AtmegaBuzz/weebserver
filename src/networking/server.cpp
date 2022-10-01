@@ -71,14 +71,13 @@ int handle_client(std::string HOST_DIR_REL_PATH,std::string* buffer,struct Confi
 
     std::string* html = buffer;
     if(file_reader(HOST_DIR +"/"+route_filename,html)){
-        std::cout << "500 internal server error" << std::endl;
-
-        file_reader(BASE_DIR+"/"+"responses/500.html",html)
-        html_preprocessor(html,HOST_DIR);
+        html_preprocessor(html,HOST_DIR,404);
         return 1;
     }
     else{
-        html_preprocessor(html,HOST_DIR);
+        if(html_preprocessor(html,HOST_DIR,200)){
+            html_preprocessor(html,HOST_DIR,500);
+        };
         return 0;
     }
         
