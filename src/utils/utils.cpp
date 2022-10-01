@@ -240,3 +240,23 @@ int html_preprocessor(std::string* html,std::string HOST_DIR){
     return 0;
 
 }
+
+int process_request(char* request,std::string* route){
+    
+    *route = "";
+    // Referer: http://192.168.0.4/
+    // GET /about HTTP/1.1
+    // std::regex route_regex("Referer: http://\\d{1,3}.\\d{1,3}.\\d{1,3}.\\d{1,3}/([a-zA-Z0-9/]*)");
+    std::regex route_regex("GET /([a-zA-Z0-9/]*)");
+    std::cmatch match;
+
+    std::regex_search(request,match,route_regex);
+    
+    *route = match[1];
+
+
+    std::cout << *route << std::endl;
+
+    return 0;
+
+}

@@ -23,3 +23,4 @@ int binderCss(std::string* html,std::vector<std::string> css_files,std::string H
 int binderJs(std::string* html,std::vector<std::string> js_files,std::string HOST_DIR);
 int html_preprocessor(std::string* html,std::string HOST_DIR);
 int file_reader(std::string file_path,std::string *buffer);
+int process_request(char* request,std::string* route);

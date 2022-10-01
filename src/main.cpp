@@ -19,13 +19,20 @@ int main(int argc, char** argv){
     std::string host_dir_rel_path = argv[2];
 
     std::ifstream config_file(BASE_DIR+"/"+host_dir_rel_path+"/"+".config"); 
+    
     std::string config_content;
     char character;
+    if(config_file.is_open()){
+        while(config_file>>character){
+            config_content+=character;
+        }
 
-    while(config_file>>character){
-        config_content+=character;
     }
-
+    else{
+        perror("couldn't find server configurations...");
+        exit(1);
+    }
+    
     struct Configs* config = parserConfig(config_content);
 
     struct Server* server = serverCreate(
