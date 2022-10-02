@@ -1,6 +1,6 @@
 # webserver
 
-A Simple implementation of a Static webserver from scratch.
+A Simple implementation of a Static webserver from scratch. being a simple implementation it can handle routes and status code. 
 
 # Setup
 
