@@ -9,8 +9,8 @@ A Simple implementation of a Static webserver from scratch.
     make
 ```
 
-## .config
-The website which is going to be hosted should conatin .config file
+## .config for server configurations
+The website which is going to be hosted should conatin .config file. [Example](https://github.com/AtmegaBuzz/webserver/tree/master/website) 
 
 ```
     server_ip = 192.168.0.4;
