@@ -14,7 +14,7 @@ int file_reader(std::string file_path,std::string *buffer){
 
     std::ifstream read_file(file_path);
     *buffer = ""; // reiniting the buffer
-
+    
     if(read_file.is_open()){
 
         char chunk;
@@ -29,6 +29,7 @@ int file_reader(std::string file_path,std::string *buffer){
     else{
         return 1;
     }
+
 
 }
 
@@ -153,27 +154,27 @@ std::vector<std::string> parserJs(std::string html){
 int bind_http_header(std::string* html,int status){
 
 
-     std::string BASE_DIR = std::filesystem::current_path();
-     std::string header_binded_html;
-
+    std::string BASE_DIR = std::filesystem::current_path();
+    std::string header_binded_html;
     if(status==500){
         if(file_reader(BASE_DIR + "/" + "responses/500.temp",&header_binded_html)){
-            *html = "";
-            if(file_reader(BASE_DIR+"/"+"responses/500.html",html)){
-                perror("Cannot find server responses\n.");
-                exit(1);
-            }
+            perror("Cannot find server responses\n.");
+            exit(1);
+        }
+        if(file_reader(BASE_DIR + "/" + "responses/500.html",html)){
+            perror("Cannot find server responses\n.");
+            exit(1);
         }
     }
 
     else if(status==404){
         if(file_reader(BASE_DIR + "/" + "responses/404.temp",&header_binded_html)){
-            *html = "";
-            if(file_reader(BASE_DIR+"/"+"responses/404.html",html)){
-                perror("Cannot find server responses\n.");
-                exit(1);
-            }
-            std::cout << BASE_DIR+"/"+"responses/404.html" << *html << std::endl;
+            perror("Cannot find server responses\n.");
+            exit(1);
+        }
+        if(file_reader(BASE_DIR + "/" + "responses/404.html",html)){
+            perror("Cannot find server responses\n.");
+            exit(1);
         }
     }
 
@@ -185,8 +186,7 @@ int bind_http_header(std::string* html,int status){
     }
 
     header_binded_html += "\n\n";
-    header_binded_html += *html;
-    *html = header_binded_html;
+    *html = header_binded_html + *html;
     return 0;
 }
 
@@ -261,6 +261,11 @@ int html_preprocessor(std::string* html,std::string HOST_DIR,int status){
             2 = server Err 500 | Js File not found
             0 = server Success 200 | html Preprocessed successfully
     */
+
+    if(status!=200) {
+        bind_http_header(html,status);
+        return 1;
+    }
 
     std::vector<std::string> css_files =  parserCss(*html);
     std::vector<std::string> js_files =  parserJs(*html);

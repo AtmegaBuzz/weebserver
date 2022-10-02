@@ -70,8 +70,14 @@ int handle_client(std::string HOST_DIR_REL_PATH,std::string* buffer,struct Confi
     std::string HOST_DIR = BASE_DIR + "/" + DIR;
 
     std::string* html = buffer;
-    if(file_reader(HOST_DIR +"/"+route_filename,html)){
+
+    if(route_filename.substr(route_filename.length()-8,route_filename.length())=="404.html"){
         html_preprocessor(html,HOST_DIR,404);
+        return 1;
+    }
+
+    if(file_reader(HOST_DIR +"/"+route_filename,html)){
+        html_preprocessor(html,HOST_DIR,500);
         return 1;
     }
     else{
@@ -126,7 +132,7 @@ int runserver(struct Server* server,std::string HOST_DIR_REL_PATH,struct Configs
         request_router(config,route,&route_filename);
 
         handle_client(HOST_DIR_REL_PATH,&html_response_buff,config,route_filename);
-        write(client_socket,html_response_buff.c_str(),strlen(html_response_buff.c_str()));
+        write(client_socket,html_response_buff.c_str(),html_response_buff.length());
         printf("message sended\n");
 
         close(client_socket);
