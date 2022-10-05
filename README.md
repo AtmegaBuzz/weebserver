@@ -3,6 +3,7 @@
 A Simple implementation of a Static webserver from scratch. being a simple implementation it can handle routes and status code. 
 
 # Setup
+Setup tutorial on [youtube](https://youtu.be/MQG5TrDgdX8)
 
 ## Build the server
 ```
