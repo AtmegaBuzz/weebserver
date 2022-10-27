@@ -1,3 +1,6 @@
+
+![Weebserver-logos_white](https://user-images.githubusercontent.com/68425016/198209507-39c6cd5c-ad15-4d9d-8ac4-2a75cfc66e20.png)
+
 # webserver
 
 A Simple implementation of a Static webserver from scratch. being a simple implementation it can handle routes and status code. 
