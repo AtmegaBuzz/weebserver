@@ -19,7 +19,8 @@ Setup tutorial on [youtube](https://youtu.be/MQG5TrDgdX8)
 The website which is going to be hosted should conatin .config file. [Example](https://github.com/AtmegaBuzz/webserver/tree/master/website) 
 
 ```
-    /* server_ip = 192.168.0.4;
+    /* 
+    server_ip = 192.168.0.4;
     port = 80;
     routes:
         {route1,<html filepath1>}
